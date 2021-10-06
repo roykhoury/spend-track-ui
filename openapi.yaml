@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: Spend Track UI
+  description: >-
+    User interface to visualize monthy spendings
+  contact:
+    email: roy_khoury12@hotmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: transaction
+    description: Get transaction information
+  - name: statement
+    description: Upload statement to persist it in db
+  - name: category
+    description: Upload list of transaction descriptions with their categories
+paths:
+  /transaction:
+    get:
+      tags:
+        - transaction
+      summary: Get transactions by user ID.
+      description: Gets the entire list of transactions for the specified user ID.
+      operationId: get
+      parameters:
+        - name: accountId
+          in: query
+          description: the ID of the logged in user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid ID
+          content: {}
+
+  /statement/credit:
+    post:
+      tags:
+        - statement
+      summary: Post a monthly statement for user ID
+      description: Returns the list of detected and saved transactions
+      operationId: post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: integer
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Invalid ID supplied
+          content: {}
+  /category/upload:
+    post:
+      tags:
+        - category
+      summary: uploads a list of transaction descriptions and corresponsing categories
+      operationId: upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryMapping'
+ 
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        type:
+          type: string
+        amount:
+          type: integer
+          format: int64
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+        category:
+          type: string
+    CategoryMapping:
+      type: object
+      properties:
+        description:
+          type: string
+        category:
+          type: string

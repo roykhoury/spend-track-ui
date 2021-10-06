@@ -1,0 +1,9 @@
+<ul>
+  <li *ngFor="let transaction of transactions$ | async as list">
+    <h2> {{transaction.description}}</h2>
+    <p>{{transaction.type}}</p>
+    <p>{{transaction.amount}}</p>
+    <p>{{transaction.date}}</p>
+    <p>{{transaction.category}}</p>
+  </li>
+</ul>

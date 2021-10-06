@@ -1,0 +1,15 @@
+.gitignore
+README.md
+api.module.ts
+api/api.ts
+api/category.service.ts
+api/statement.service.ts
+api/transaction.service.ts
+configuration.ts
+encoder.ts
+git_push.sh
+index.ts
+model/categoryMapping.ts
+model/models.ts
+model/transaction.ts
+variables.ts
